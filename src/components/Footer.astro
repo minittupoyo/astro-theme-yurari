@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/utils/url";
 import { siteConfig } from "@/config";
 ---
 
@@ -7,7 +8,7 @@ import { siteConfig } from "@/config";
   <div class="card flex flex-wrap items-center justify-center gap-x-2 px-4 py-6 text-sm">
     <span>{`© ${new Date().getFullYear()} ${siteConfig.title}`}</span>
     <span aria-hidden="true">·</span>
-    <a href="/rss.xml" class="text-primary underline">
+    <a href={withBase("/rss.xml")} class="text-primary underline">
       RSS
     </a>
     <span aria-hidden="true">·</span>

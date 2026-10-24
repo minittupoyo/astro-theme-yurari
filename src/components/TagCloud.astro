@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/utils/url";
 import { countBy, getSortedPosts } from "@/utils/posts";
 
 interface Props {
@@ -22,14 +23,14 @@ const current = Astro.params.tag;
   <section class="card p-4" aria-label="Tag cloud">
     <div class="mb-3 flex items-center justify-between">
       <h2 class="font-bold">Tags</h2>
-      <a href="/tags" class="text-primary text-xs underline">
+      <a href={withBase("/tags")} class="text-primary text-xs underline">
         View all
       </a>
     </div>
     <div class="flex flex-wrap items-center gap-1.5">
       {tags.map(([tag, n]) => (
         <a
-          href={`/tags/${encodeURIComponent(tag)}`}
+          href={withBase(`/tags/${encodeURIComponent(tag)}`)}
           style={`font-size: ${size(n)}rem`}
           title={`${n} ${n === 1 ? "post" : "posts"}`}
           class:list={["btn h-auto px-2.5 py-1 leading-tight", tag === current && "!bg-primary text-white"]}

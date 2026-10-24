@@ -51,7 +51,6 @@ astro dev --background   # http://localhost:4321
 | 設定                                                         | 内容                                                                                                                                                             |
 | :----------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `siteConfig.title` / `subtitle` / `description`              | サイト名、サブタイトル、説明                                                                                                                                     |
-| `siteConfig.url`                                             | 公開URL(RSS 用)。`astro.config.mjs` の `site` も合わせて変更する                                                                                                 |
 | `siteConfig.pageSize`                                        | 1ページに表示する記事数                                                                                                                                          |
 | `siteConfig.dateFormat` / `archiveDateFormat` / `dateLocale` | 日付の書式(`YYYY` `YY` `MMMM` `MMM` `MM` `M` `DD` `D`、`[ ]` で囲むとそのまま出力。例: `"YYYY-MM-DD"`、`"YYYY年M月D日"`)と、月名の言語(`"en-US"` `"ja-JP"` など) |
 | `siteConfig.themeHue`                                        | テーマカラーの初期値(0〜360)。閲覧者はパレットから変更できる                                                                                                     |
@@ -59,8 +58,19 @@ astro dev --background   # http://localhost:4321
 | `profileConfig`                                              | プロフィールの名前・画像・紹介文・SNSリンク                                                                                                                      |
 | `navLinks`                                                   | ヘッダーのナビゲーション(PC・モバイル共通)                                                                                                                       |
 
-> [!NOTE]
-> **公開前に** `siteConfig.url` と `astro.config.mjs` の `site` を、本番のURLに変更してください(初期値は `https://example.com`)。
+## 公開 (GitHub Pages)
+
+`main` ブランチに push すると、GitHub Actions(`.github/workflows/deploy.yml`)がビルドして GitHub Pages に公開します。デモサイト: https://minittupoyo.github.io/astro-theme-yurari/
+
+自分のリポジトリで使うには、リポジトリの **Settings → Pages → Build and deployment → Source** を **GitHub Actions** にします。公開URLとサブパスは、ワークフローが所有者名とリポジトリ名から `SITE_URL` / `BASE_PATH` として設定するので、フォークでもそのまま動きます。
+
+別のURLで公開する場合は、ビルド時に環境変数で渡します(未指定なら、サイトはルート `/` で動きます)。
+
+```sh
+SITE_URL=https://example.com BASE_PATH=/blog bun run build
+```
+
+サイト内のリンクは `src/utils/url.ts` の `withBase()` で `BASE_PATH` を付けています。Markdown 内のサイト内リンクと画像(`/about`、`/hero.svg` など)は、`src/plugins/base.mjs` が自動で付けます。
 
 ### 画像
 
@@ -138,9 +148,9 @@ OGP の取得にはビルド時に [open-graph-scraper](https://github.com/jshem
     ├── config.ts           # サイト設定
     ├── layouts/Layout.astro
     ├── pages/              # /, /posts/*, /tags/*, /categories/*, /archive, /about, rss.xml, search.json
-    ├── plugins/            # callout, ogp (Sätteri の mdast プラグイン)
+    ├── plugins/            # callout, ogp, base (Sätteri の mdast プラグイン)
     ├── styles/global.css   # テーマ色、記事本文、各種コンポーネントのスタイル
-    └── utils/              # 記事の取得、Tabler アイコンの SVG 化
+    └── utils/              # 記事の取得、日付の整形、base の付与、Tabler アイコンの SVG 化
 ```
 
 ## 補足

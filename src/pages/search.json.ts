@@ -1,9 +1,11 @@
 import { getSortedPosts } from "@/utils/posts";
+import { withBase } from "@/utils/url";
 
 export async function GET() {
   const posts = await getSortedPosts();
   const index = posts.map((p) => ({
     id: p.id,
+    url: withBase(`/posts/${p.id}`),
     title: p.data.title,
     description: p.data.description,
     tags: p.data.tags,

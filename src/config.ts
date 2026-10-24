@@ -9,7 +9,6 @@ export const siteConfig = {
   lang: "ja",
   description: "A soft, pastel blog theme for Astro",
   // 0 - 360 のテーマカラー(hue)
-  url: "https://example.com",
   pageSize: 5,
   // 日付の表記。YYYY YY MMMM MMM MM M DD D が使える。[ ] で囲むとそのまま出力される
   //   例: "YYYY-MM-DD" / "YYYY/MM/DD" / "MMM D, YYYY" / "YYYY年M月D日" / "D MMMM YYYY"

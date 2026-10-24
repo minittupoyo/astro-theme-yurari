@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/utils/url";
 import Layout from "@/layouts/Layout.astro";
 import { countBy, getSortedPosts } from "@/utils/posts";
 
@@ -11,7 +12,7 @@ const categories = countBy((await getSortedPosts()).map((p) => p.data.category))
     <ul>
       {categories.map(([c, n]) => (
         <li>
-          <a href={`/categories/${encodeURIComponent(c)}`} class="btn flex h-11 w-full justify-between bg-transparent px-3">
+          <a href={withBase(`/categories/${encodeURIComponent(c)}`)} class="btn flex h-11 w-full justify-between bg-transparent px-3">
             <span class="font-semibold">{c}</span>
             <span class="text-primary">{n}</span>
           </a>

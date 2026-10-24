@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/utils/url";
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import { siteConfig } from "@/config";
@@ -17,7 +18,7 @@ const years = [...byYear.keys()].sort((a, b) => b - a);
         <ul>
           {byYear.get(year)!.map((p) => (
             <li>
-              <a href={`/posts/${p.id}`} class="btn flex h-11 w-full justify-start gap-4 bg-transparent px-3">
+              <a href={withBase(`/posts/${p.id}`)} class="btn flex h-11 w-full justify-start gap-4 bg-transparent px-3">
                 <span class="text-ink-sub min-w-16 text-sm">{formatDate(p.data.published, siteConfig.archiveDateFormat)}</span>
                 <span class="font-semibold">{p.data.title}</span>
               </a>

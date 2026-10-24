@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import type { Page } from "astro";
+import { withBase } from "@/utils/url";
 
 interface Props {
   page: Page;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const { page, base } = Astro.props;
-const root = base.replace(/\/$/, "");
+const root = withBase(base).replace(/\/$/, "");
 const href = (n: number) => (n === 1 ? root || "/" : `${root}/${n}`);
 
 // 現在ページの前後2ページ + 先頭・末尾。間は省略(…)

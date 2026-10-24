@@ -1,21 +1,23 @@
 ---
 import { Icon } from "astro-icon/components";
 import { navLinks, siteConfig } from "@/config";
+import { isCurrent, withBase } from "@/utils/url";
 
 const path = Astro.url.pathname;
+const searchIndexUrl = withBase("/search.json");
 ---
 
 <header transition:name="navbar" transition:animate="none" class="fixed inset-x-0 top-0 z-50 px-4 pt-3">
   <nav class="card relative mx-auto flex h-16 max-w-5xl items-center justify-between gap-2 px-4 shadow-sm">
-    <a href="/" class="btn h-11 min-w-0 justify-start bg-transparent px-3 text-lg font-bold">
+    <a href={withBase("/")} class="btn h-11 min-w-0 justify-start bg-transparent px-3 text-lg font-bold">
       <span class="truncate">{siteConfig.title}</span>
     </a>
 
     <div class="flex shrink-0 items-center gap-1">
       {navLinks.map((l) => (
         <a
-          href={l.url}
-          class:list={["btn hidden h-11 px-4 font-semibold sm:inline-flex", "bg-transparent", path === l.url && "text-primary"]}
+          href={withBase(l.url)}
+          class:list={["btn hidden h-11 px-4 font-semibold sm:inline-flex", "bg-transparent", isCurrent(path, l.url) && "text-primary"]}
         >
           {l.name}
         </a>
@@ -60,8 +62,8 @@ const path = Astro.url.pathname;
       {navLinks.map((l) => (
         <li>
           <a
-            href={l.url}
-            class:list={["btn flex h-12 w-full justify-start bg-transparent px-4 font-semibold", path === l.url && "text-primary"]}
+            href={withBase(l.url)}
+            class:list={["btn flex h-12 w-full justify-start bg-transparent px-4 font-semibold", isCurrent(path, l.url) && "text-primary"]}
           >
             {l.name}
           </a>
@@ -71,7 +73,7 @@ const path = Astro.url.pathname;
   </nav>
 </header>
 
-<div id="search-modal" class="fixed inset-0 z-[60] hidden items-start justify-center bg-black/40 px-4 pt-24">
+<div id="search-modal" data-index={searchIndexUrl} class="fixed inset-0 z-[60] hidden items-start justify-center bg-black/40 px-4 pt-24">
   <div class="card w-full max-w-lg p-4 shadow-xl">
     <input
       id="search-input"
@@ -174,7 +176,7 @@ const path = Astro.url.pathname;
   const root = document.documentElement;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
-  type Item = { id: string; title: string; description: string; tags: string[]; category: string; body: string };
+  type Item = { id: string; url: string; title: string; description: string; tags: string[]; category: string; body: string };
   let index: Item[] | null = null;
 
   const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -185,7 +187,7 @@ const path = Astro.url.pathname;
     modal.classList.toggle("flex", open);
     if (!open) return;
     $<HTMLInputElement>("search-input").focus();
-    index ??= await (await fetch("/search.json")).json();
+    index ??= await (await fetch(modal.dataset.index!)).json();
   };
 
   const renderResults = () => {
@@ -202,7 +204,7 @@ const path = Astro.url.pathname;
     results.innerHTML = hits.length
       ? hits
           .map(
-            (p) => `<li><a href="/posts/${p.id}" class="btn block h-auto w-full bg-transparent px-3 py-2 text-left">
+            (p) => `<li><a href="${p.url}" class="btn block h-auto w-full bg-transparent px-3 py-2 text-left">
               <div class="font-semibold">${esc(p.title)}</div>
               <div class="text-ink-sub text-sm">${esc(p.description)}</div></a></li>`,
           )
