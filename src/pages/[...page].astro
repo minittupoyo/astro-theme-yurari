@@ -14,7 +14,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 ---
 
-<Layout>
+<Layout hero={page.currentPage === 1}>
   {page.currentPage === 1 && <Hero slot="hero" />}
   <div class="flex flex-col gap-4">
     {page.data.map((post) => (

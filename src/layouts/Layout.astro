@@ -12,10 +12,11 @@ import Footer from "@/components/Footer.astro";
 interface Props {
   title?: string;
   description?: string;
+  // ヒーロー (hero スロット) を表示するページ。固定ヘッダーぶんの上余白を省くために必要
+  hero?: boolean;
 }
 
-const { title, description = siteConfig.description } = Astro.props;
-const hasHero = Astro.slots.has("hero");
+const { title, description = siteConfig.description, hero: hasHero = false } = Astro.props;
 const pageTitle = title ? `${title} - ${siteConfig.title}` : `${siteConfig.title} - ${siteConfig.subtitle}`;
 ---
 
