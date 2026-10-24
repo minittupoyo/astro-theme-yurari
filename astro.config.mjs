@@ -14,7 +14,7 @@ import base from "./src/plugins/base.mjs";
 // 管理画面のルートはサーバーレンダリングが必要で、静的ビルドにはアダプターが要るため。
 const isDev = process.argv.includes("dev");
 
-// 公開URLとサブパスは環境変数で渡す (GitHub Pages のワークフローが設定する)。
+// 公開URLとサブパスは、ビルド時に環境変数で渡す (サブパスで公開するときだけ必要)。
 // 未指定なら、ローカルでは http://localhost:4321/ そのまま動く。
 //   SITE_URL  例: https://<user>.github.io
 //   BASE_PATH 例: /<repo>

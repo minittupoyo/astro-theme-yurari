@@ -4,6 +4,8 @@ Yurari(ゆらり)は、[Fuwari](https://github.com/saicaca/fuwari) にインス�
 
 Astro 7 / Tailwind CSS v4 / TypeScript で作っています。
 
+**[デモサイト](https://minittupoyo.github.io/astro-theme-yurari-demo/)**
+
 ![トップページ](docs/screenshots/home.png)
 
 <table>
@@ -57,20 +59,6 @@ astro dev --background   # http://localhost:4321
 | `siteConfig.hero`                                            | ヒーローの画像・タイトル・サブタイトル                                                                                                                           |
 | `profileConfig`                                              | プロフィールの名前・画像・紹介文・SNSリンク                                                                                                                      |
 | `navLinks`                                                   | ヘッダーのナビゲーション(PC・モバイル共通)                                                                                                                       |
-
-## 公開 (GitHub Pages)
-
-`main` ブランチに push すると、GitHub Actions(`.github/workflows/deploy.yml`)がビルドして GitHub Pages に公開します。デモサイト: https://minittupoyo.github.io/astro-theme-yurari/
-
-自分のリポジトリで使うには、リポジトリの **Settings → Pages → Build and deployment → Source** を **GitHub Actions** にします。公開URLとサブパスは、ワークフローが所有者名とリポジトリ名から `SITE_URL` / `BASE_PATH` として設定するので、フォークでもそのまま動きます。
-
-別のURLで公開する場合は、ビルド時に環境変数で渡します(未指定なら、サイトはルート `/` で動きます)。
-
-```sh
-SITE_URL=https://example.com BASE_PATH=/blog bun run build
-```
-
-サイト内のリンクは `src/utils/url.ts` の `withBase()` で `BASE_PATH` を付けています。Markdown 内のサイト内リンクと画像(`/about`、`/hero.svg` など)は、`src/plugins/base.mjs` が自動で付けます。
 
 ### 画像
 
@@ -130,6 +118,23 @@ OGP の取得にはビルド時に [open-graph-scraper](https://github.com/jshem
 
 > [!NOTE]
 > 管理画面は **開発サーバーでのみ有効** です(`astro.config.mjs` で `astro dev` のときだけ読み込み)。管理画面にはサーバーレンダリングが必要で、静的ビルドにはアダプターが要るためです。本番サイトでの編集が必要な場合は、アダプターの追加と、保存先を GitHub などにする設定が必要です。
+
+## 公開(デプロイ)
+
+`bun run build` で静的サイトが `dist/` に出力されます。Netlify、Vercel、Cloudflare Pages、GitHub Pages など、静的ファイルを配信できるところならどこでも公開できます。
+
+公開URLとサブパスは、ビルド時に環境変数で渡します(未指定なら、サイトはルート `/` で動きます)。
+
+| 環境変数    | 内容                         | 例                    |
+| :---------- | :--------------------------- | :-------------------- |
+| `SITE_URL`  | 公開URL(RSS などで使用)      | `https://example.com` |
+| `BASE_PATH` | サブパスで公開するときのパス | `/blog`               |
+
+```sh
+SITE_URL=https://example.com BASE_PATH=/blog bun run build
+```
+
+サイト内のリンクは `src/utils/url.ts` の `withBase()` で `BASE_PATH` を付けています。Markdown 内のサイト内リンクと画像(`/about`、`/hero.svg` など)は、`src/plugins/base.mjs` が自動で付けます。
 
 ## ディレクトリ構成
 
